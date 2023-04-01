@@ -1,0 +1,260 @@
+ {% extends 'base_category.html' %}
+{% load static %}
+{% block title %}Product Detail Page{% endblock title %} 
+
+{% block links %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+{% endblock links %}
+
+{% block main-content %}
+
+<style>
+    .fixed-size-image {
+      width: 300px;
+      height: 300px;
+    }
+
+    .fixed-size-sub-image{
+        width: 100px;
+        height: 100px;
+    }
+</style>
+
+<div class="container p-5">
+    <div class="row">
+       
+        <div class="col-md-6">
+            <div class="row">
+              <div class="col-3">
+                {% for im in products %}
+                
+                   <img src="{{ im.image.url }}" alt="Product Image" class="img-fluid small_img  product-img fixed-size-sub-image" data-main="{{ single_product.images.url }}">
+
+
+                {% endfor %}
+              </div>
+              <div class="col-9">
+              <img src="{{ single_product.images.url }}" alt="Product Image" class="img-fluid big_img fixed-size-image" id="main-img"> 
+                
+
+              </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h2>{{ single_product.product_name }}</h2>
+
+
+            <div class="rating-star">
+                <span class="colour">
+                    <i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <span>{{single_product.countReview}} reviews</span>
+                </span>
+                <style>
+                    .colour{
+                        color: #f0bc00;
+                    }
+                </style>
+            </div>
+
+
+
+            <p>{{ single_product.description }}</p>
+            <label for="color-select">Choose a color :</label>
+            <select name='color' class="form-control" id="color-select" required>
+                <option value="" disabled selected> Select</option>
+                {% for i in single_product.variation_set.colors %}
+                <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
+                {% endfor %}
+            </select>
+            <label for="size-select">Choose a size:</label>
+            <select name='size' class="form-control" id="size-select">
+                <option value="" disabled selected> Select</option>
+                {% for i in single_product.variation_set.sizes %}
+                <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
+                {% endfor %}
+            </select>
+            <h3>₹{{ single_product.price}}</h3>
+            {% if single_product.stock <= 0 %}
+            <h5 class="text-danger">Out of stock</h5>
+            {% else %}
+            {% if in_cart %}
+            <a href="#" class="btn btn-success">Added to Cart</a>
+            <a href="{% url 'cart' %}" class="btn btn-outline-primary">View Cart</a>
+            {% else %}
+            <a href="{% url 'add_cart' single_product.id %}"><button type="submit" class="btn btn-primary">Add to Cart</button></a>
+            <a href="{% url 'add_wishlist' single_product.id %}" class="btn_3"><button type="button" class="btn btn-primary mr-2">add to wishlist</button></a>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!--review and rating-->
+
+<div class="row mt-5 margin">
+    <div class="col-md-9">
+        <header class="section-heading">
+        <h3>Customer Reviews </h3>
+        </header>
+
+
+        <form action="{% url 'submit_review' single_product.id %}" method="POST">
+            {% csrf_token %}
+            <h5>Write your review</h5>
+
+             
+
+            <div>
+                <!--rating stars-->
+                <label for=" ">How do you rate this product?</label>
+                <br>
+                <div class="rate">
+                    <input type="radio" name="rating" id="rating10" value="5"   required/>   <label  for="rating10" title="5">  </label>
+                    <input type="radio" name="rating" id="rating9"  value="4.5" required/>   <label  for="rating9"  title="4.5"  class="half">  </label>
+                    <input type="radio" name="rating" id="rating8"  value="4"   required/>   <label  for="rating8"  title="4 "> </label>
+                    <input type="radio" name="rating" id="rating7"  value="3.5"   required/>  <label  for="rating7"  title="3.5"  class="half">  </label>
+                    <input type="radio" name="rating" id="rating6"  value="3"   required/>   <label  for="rating6"  title="3">  </label>
+                    <input type="radio" name="rating" id="rating5"  value="2.5" required/>   <label  for="rating5"  title="2.5"  class="half">  </label>
+                    <input type="radio" name="rating" id="rating4"  value="2"   required/>   <label  for="rating4"  title="2">  </label>
+                    <input type="radio" name="rating" id="rating3"  value="1.5" required/>   <label  for="rating3"  title="1.5"  class="half">  </label>
+                    <input type="radio" name="rating" id="rating2"  value="1"   required/>   <label  for="rating2"  title="1">  </label>
+                    <input type="radio" name="rating" id="rating1"  value="0.5" required/>   <label  for="rating1"  title="0.5"  class="half">  </label>
+
+                </div>
+
+                <br>
+                Review Title:
+                <input type="text" class="form-control" name="subject" >
+                <br>
+                Review:
+                <textarea name="review"  rows="4"  class="form-control"> </textarea>
+                <br>
+                
+                {% if user.is_authenticated  %}
+
+                    {% comment %} {% if orderproduct %} {% endcomment %}
+
+                    <input type="submit" value="Submit Review" class="btn btn-primary ">
+                    {% comment %} {% else %}
+
+                        <p>purchhase the  product to post the review</p>
+
+                    {% endif %} {% endcomment %}
+                
+                    {% else %}
+                    <p>you must be logged in to post a review.<span><a href="{% url 'login' %}">Login Now</a></span></p>
+                {% endif %}
+            </div>
+        </form>
+        <br>
+
+        
+        {% for review in reviews %}
+        <article class="box mb-3">
+            <div class="icontext w-100">
+                {% comment %} <img src="#" class="img-xs icon rounded-circle"> {% endcomment %}
+                <div class="text">
+                    <span class="date text-muted float-md-right">{{review.updated_at}}</span>
+                    <h6 class="mb-1">{{ review.user.username }}</h6>
+
+                    <div>
+                        <span>
+                            <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}"  style="color: #f0bc00;"></i>
+                            <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}"  style="color: #f0bc00;"></i>
+                            <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}"  style="color: #f0bc00;"></i> 
+                            <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}"  style="color: #f0bc00;"></i> 
+                            <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}"  style="color: #f0bc00;"></i>     
+
+
+
+
+                        </span>
+                    </div>
+
+                </div>
+            </div> <!-- icontext.// -->
+            <div class="mt-3">
+                <h6>{{review.subject}}</h6>
+                <p>  {{review.review}} </p>
+            </div>
+        </article>
+        {% endfor %}
+    
+    
+
+    </div>
+</div> 
+<style>
+    .margin{
+        margin: 150px 480px;
+      }
+</style>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+{% endblock main-content %} 
+
+    
+{% block script %}
+    
+
+<script src="{% static 'js/zoomsl.js' %}"></script>
+<script src="{% static 'js/zoomsl.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      $(".big_img").imagezoomsl({
+          zoomrange:[-4,-4]
+      })
+       
+      })
+</script>
+
+
+
+#for multiple images ,when clicking the subimage ,show it in main image field
+
+<script>
+  $(document).ready(function() {
+    $('.small_img').click(function() {
+      var newSrc = $(this).attr('src');
+      var mainSrc = $(this).data('main');
+      $('#main-img').attr('src', newSrc).data('main', mainSrc);
+    });
+  });
+</script>
+
+
+
+<script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
+
+
+{% endblock script %}
+
+

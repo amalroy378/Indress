@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Out of Stock{% endblock %}
+
+{% block content %}
+    <h2>Out of Stock</h2>
+    <p>Sorry, the product "{{ product.product_name }}" is out of stock.</p>
+    <a href="{% url 'product_detail' slug=product.slug %}" class="btn btn-primary">Back to Product</a>
+{% endblock %}

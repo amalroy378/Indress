@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Enter OTP</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Add the Bootstrap stylesheet -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<style>
+		body {
+			background-color: black;
+			color: white;
+		}
+		.container {
+			margin-top: 50px;
+			text-align: center;
+		}
+		.otp-input {
+			display: inline-flex;
+			align-items: center;
+		}
+		input[type="text"] {
+			width: 50px;
+			margin: 0 10px;
+			text-align: center;
+			border-radius: 5px;
+			border: none;
+			background-color: #383838;
+			color: white;
+			font-size: 24px;
+			padding: 10px;
+		}
+		.btn {
+			margin-left: 10px;
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.btn:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+<form action="" method="POST">
+	{% csrf_token %}
+	<div class="container">
+		<h1>Enter OTP</h1>
+		
+		<p>Please enter the OTP sent to your mobile number</p>
+		<div class="otp-input">
+			<input type="hidden" name="usr" value="{{usr.username}}">
+
+			<input type="text" name='otp' maxlength="6" required>
+			<button type="submit" class="btn">Submit</button>
+			{% for message in messages %}
+                      <div class="alert alert-danger" role="alert">
+                        {{message}}
+                      </div>
+            {% endfor %}
+
+		</div>
+	</div>
+<form>
+
+	<!-- Add the Bootstrap JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

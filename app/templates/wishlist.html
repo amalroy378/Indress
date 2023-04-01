@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Wishlist{% endblock title %}
+
+
+{% block main-content %}
+
+<div class="container mt-4">
+    <h2>Favourites</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wishlist_item in wishlist_items %}
+            <tr>
+                <td>1</td>
+                <td><div class="img-thumbnail" style="max-width: 150px;"><img src="{{ wishlist_item.product.images.url }}" alt="Product 1" class="img-thumbnail"></div></td>
+                <td>{{ wishlist_item.product.product_name }}</td>
+                <td>{{ wishlist_item.product.description}}</td>
+                <td>{{ wishlist_item.product.price }}</td>
+                <td>
+                   {% comment %} <a href="{% url 'add_cart' wishlist_item.id %}"> <button type="button" class="btn btn-success mr-2">Add to Cart</button></a>
+                    <button type="button" class="btn btn-primary mr-2">View Details</button> {% endcomment %}
+                    <a href="{% url 'remove_wishlistitem' wishlist_item.product.id %}"><button type="button" class="btn btn-danger">Remove</button></a>
+                    
+                    <a href="{% url 'add_cart'  wishlist_item.product.id %}"><button type="submit" class="btn btn-primary">Add to Cart</button></a>
+
+
+                </td>
+            </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock main-content  %}

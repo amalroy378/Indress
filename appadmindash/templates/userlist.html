@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+{% block main-content %}
+<div class="container">
+    <h1>User Details</h1>
+    <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Block/Unblock</th>
+        </tr>
+      </thead>
+
+
+      {% for u in user %}
+      <tbody>
+        <tr>
+          <td>{{u.id}}</td>
+          <td>{{u.username}}</td>
+          <td>{{u.email}}</td>
+          <td>{{u.is_staff}}</td>
+          
+          {% if u.is_active %}
+        <td><button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal"
+            data-bs-target="#block{{ forloop.counter }}">
+            Block
+          </button></td>
+
+          {% else %}
+          <td>
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+              data-bs-target="#block{{ forloop.counter }}">
+              Unblock
+            </button>
+          </td>
+        {% endif %}
+
+
+        <div class="modal fade" id="block{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                {{u.username}}
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{% url 'block_unblock' u.id %}"> <button type="button"
+                    class="btn btn-primary">Confirm</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        </tr>
+       </tbody>
+       {% endfor %}
+    </table>
+  </div>
+
+{% endblock main-content %}

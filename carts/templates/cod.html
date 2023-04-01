@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="margin-top: 50px;">
+
+    <div class="container">
+      
+      <div class="row">
+       
+        <div class="col-md-6 col-md-offset-3 ">
+          <div class="panel panel-success ">
+            
+            <div class="panel-heading">
+              <h2 style="text-center">Cash On Delivery</h2>
+              <h3 class="panel-title">Order Placed</h3>
+            </div>
+            <div class="panel-body">
+              <p>Thank you for your order! Your payment will be collected on delivery.</p>
+              <p>Order Details:</p>
+              {% for cart_item in cart_items %}
+              <table class="table">
+                <tr>
+                  <th>Product</th>
+                  <th>Order ID</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                </tr>
+                <tr>
+                  <td>{{ cart_item.product.product_name }}</td>
+                  <td>{{order_number.order_number}}</td>
+                  <td>₹{{ cart_item.product.price }}</td>
+                  <td>{{cart_item.quantity}}</td>
+                </tr>
+                <br>
+                <tr>
+                  <td><strong>Total</strong></td>
+                  <td><strong>₹ {{ cart_item.sub_total }}</strong></td>
+                </tr>
+              </table>
+              {%endfor%}
+              <br>
+              <br>
+
+
+              <div class="panel-heading">
+                <h2 style="text-center">Address</h2>
+               
+              </div>
+              <div class="panel-body">
+           
+                
+                <table class="table">
+                  <tr>
+                    <th>Name</th>
+                    <th>Order ID</th>
+                    <th>Phone</th>
+                    <th>Address Line1</th>
+                    <th>Address Line2</th>
+
+                  </tr>
+                  <tr>
+                    <td>{{ order.first_name }}</td>
+                    <td>{{order.order_number}}</td>
+                    <td>{{order.phone}}</td>
+                    <td>{{order.address_line_1}}</td>
+                    <td>{{order.address_line_2}}</td>
+
+                  </tr>
+                  <br>
+                
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+	<a href="{% url 'home' %}" class="btn btn-light btn-block w-100 mt-3">Continue Shopping</a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+  
+</html>

@@ -1,0 +1,91 @@
+{% extends 'base_category.html' %}
+{% load static %}
+{% block title %}Women Page{% endblock title %}
+
+
+
+
+
+{% block banner_slider %} 
+
+<div id="carouselExampleFade" class="carousel slide carousel-fade">
+    {% for w in women %}
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{{w.carousel_img.url}}" class="d-block w-100" alt="...">
+        <div class="carousel-caption"><h1>{{ w.carousel_text }}</h1></div>
+      </div>
+    </div>
+    {% endfor %}
+    
+   
+</div>
+<style>
+    .carousel-caption {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+      }
+      .carousel-caption h1 {
+        font-size: 3rem;
+        text-align: center;
+      }
+      
+</style>
+  
+  
+{% endblock banner_slider %}
+ 
+ 
+ 
+  {% block main-content %}
+  
+  
+<br>  
+<br>        
+<div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+  {% for product in products %}
+   <div class="col">
+    <div class="card">
+      
+       <img src="{{product.images.url}}"  class="card-img-top   mx-auto d-block " alt="Image"   style="width: 20rem; height: 18rem;">
+      
+      <div class="card-body">
+        <p class="card-text">{{product.product_name}}</p>
+
+        <div class="price mt-1">₹{{product.price}}</div>
+        <div class="description mt-1">{{product.description}}</div>
+
+
+        <a href="#" class="btn btn-block btn-primary">Add to Cart</a>
+      
+        
+        <!-- {% comment %} <a href="{% url 'product_details_view' h.id %}" class="btn btn-primary">Quick View</a> {% endcomment %} -->
+      </div>
+    </div>
+   </div>
+
+  {% endfor %}
+
+</div>
+<br>  
+<br>  
+<br>  
+<br>  
+  
+  
+  {% endblock main-content %}
+
+
+
+
+
+
+ 

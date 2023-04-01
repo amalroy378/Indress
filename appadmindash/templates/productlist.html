@@ -1,0 +1,358 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Product List{% endblock title %}
+
+{% block main-content %}
+
+<!-- Button trigger modal -->
+<a type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#addProduct">
+  <i title="Add Product" class="fa fa-plus">Add Product</i>
+</a>
+
+<!--Add product  Modal -->
+<div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form action="{% url 'add_product'%}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+
+
+        <div class="form-outline mb-4">
+          <input required name="image" type="file"  class="form-control"/>
+        </div>
+
+        <div class="form-outline mb-4">
+          <input required name='product_name'  type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Product name</label>
+        </div>
+
+                
+        
+        <div class="form-group mb-4">
+          <select name="product_category" class="form-control" id="dropdownInput">
+            {% for c in categories  %}
+            <option  value="{{c.id}}">{{c.category_name}}</option>
+            {% endfor %}
+          </select>
+          <label for="dropdownInput">Category</label>
+        </div>                  
+
+        <div class="form-outline mb-4">
+          <input name='product_price' value="{{product.price}}" type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Price</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          <input name='product_stock' value="{{product.stock}}" type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Stock</label>
+        </div>
+         <!-- 
+        <div class="form-outline w-25 mb-4">
+          <input name='pro_color' type="color" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">color</label>
+        </div> -->
+
+
+        <div class="d-flex justify-content-center">
+          <button type="submit"
+            class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<!--end of add product modal-->
+
+<div class="pagetitle">
+  <h1>Products</h1>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+  <div class="row">
+
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+
+        <!-- Recent Sales -->
+        <div class="col-12">
+          <div class="card recent-sales overflow-auto">
+            <div class="card-body">
+
+              <table class="table table-borderless datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">image</th>
+                    <th scope="col">Product name</th>
+                    <th scope="col">Category</th>
+
+                    <th scope="col">price</th>
+                    <th scope="col">stock</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Action</th>
+
+
+
+
+                  </tr>
+                </thead>
+                
+                {% for product in products %}
+
+                  <tr>
+                    <td>  {{product.id}}  </td>
+                    <td>
+                      <div style="width: 100px;" class="overflow-hidden">
+                        <img class="w-100" src=" {{product.images.url}}    " alt="">
+                      </div>
+                    </td>
+                    
+                    <td>  {{product.product_name}} </td>
+                    <td>  {{product.category}} </td>
+                    <td>₹{{product.price}}</td>
+                    <td>{{product.stock}}</td>
+                    <td>{{product.is_available}}</td>
+                   <td>
+                      <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">
+                          Delete
+                        </button>
+
+                        <!-- Modal  for delete the product -->
+                        <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                delete product {{product.product_name}}
+                              </div>
+                              <div class="modal-footer">
+                                <form action="{% url 'delete_product' product.id %}" >
+                                  <button type="submit" class="btn btn-danger">Confirm</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
+                    <!--deleting ended-->
+
+
+                  <!--Modal for editing the product-->
+                  <td>    
+                    <!-- Button trigger modal -->
+                    <a type="button" class="fs-4 text-warning" data-bs-toggle="modal" data-bs-target="#confirmEdit{{forloop.counter}}">
+                      <i title="Edit Product" class="fa fa-edit">edit</i>
+                    </a>
+
+                    <!--Edit Modal -->
+                    <div class="modal fade" id="confirmEdit{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form action="{% url 'edit_product' product.id %}"  enctype="multipart/form-data" method="POST">
+                              {% csrf_token %}
+
+                              <div style="width: 100px;" class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <img class="img-fluid w-100" src="{{product.images.url}} " alt="">
+                              </div> 
+              
+                              <div class="form-outline mb-4">
+                                <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                              </div>
+                             
+              
+                              <div class="form-outline mb-4">
+                                <input name='product_name' value="{{product.product_name}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example3cg">Product name</label>
+                              </div>
+
+                                  
+
+                              <div class="form-group mb-4">
+                                <select name="product_category" class="form-control" id="dropdownInput">
+                                  {% for c in categories %}
+                                  <option  value="{{c.id}}">{{c.category_name}}</option>
+                                  {% endfor %}
+                                </select>
+                                <label for="dropdownInput">Category</label>
+                              </div>     
+                              
+                              <div class="form-outline mb-4">
+                                <input name='product_price' value="{{product.price}}" type="text" id="form3Example3cg" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example3cg">Price</label>
+                              </div>
+
+                              <div class="form-outline mb-4">
+                                <input value="{{product.stock}}" name='product_quantity'  type="text" id="form3Example3cg" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example3cg">Stock</label>
+                              </div>
+              
+              
+                              <div class="d-flex justify-content-center">
+                                <button type="submit"
+                                  class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+                              </div>
+              
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!--editing ended-->
+
+                 </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
+        </div><!-- End Recent Sales -->
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+{% comment %} <section class="section dashboard">
+    <div class="row">
+
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+ <table class="table align-middle mb-0 bg-white  p-5">
+    <thead class="bg-light">
+      <tr>
+        <th>Product_id</th>
+        <th>Product_name</th>
+        <th>Product_brand</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+            <img
+                src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+                alt=""
+                style="width: 45px; height: 45px"
+                class="rounded-circle"
+                />
+            <div class="ms-3">
+              <p class="fw-bold mb-1">John Doe</p>
+              <p class="text-muted mb-0">john.doe@gmail.com</p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="fw-normal mb-1">Software engineer</p>
+          <p class="text-muted mb-0">IT department</p>
+        </td>
+        <td>
+          <span class="badge badge-success rounded-pill d-inline">Active</span>
+        </td>
+        <td>Senior</td>
+        <td>
+          <button type="button" class="btn btn-link btn-sm btn-rounded">
+            Edit
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+            <img
+                src="https://mdbootstrap.com/img/new/avatars/6.jpg"
+                class="rounded-circle"
+                alt=""
+                style="width: 45px; height: 45px"
+                />
+            <div class="ms-3">
+              <p class="fw-bold mb-1">Alex Ray</p>
+              <p class="text-muted mb-0">alex.ray@gmail.com</p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="fw-normal mb-1">Consultant</p>
+          <p class="text-muted mb-0">Finance</p>
+        </td>
+        <td>
+          <span class="badge badge-primary rounded-pill d-inline"
+                >Onboarding</span
+            >
+        </td>
+        <td>Junior</td>
+        <td>
+          <button
+                  type="button"
+                  class="btn btn-link btn-rounded btn-sm fw-bold"
+                  data-mdb-ripple-color="dark"
+                  >
+            Edit
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+            <img
+                src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                class="rounded-circle"
+                alt=""
+                style="width: 45px; height: 45px"
+                />
+            <div class="ms-3">
+              <p class="fw-bold mb-1">Kate Hunington</p>
+              <p class="text-muted mb-0">kate.hunington@gmail.com</p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="fw-normal mb-1">Designer</p>
+          <p class="text-muted mb-0">UI/UX</p>
+        </td>
+        <td>
+          <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
+        </td>
+        <td>Senior</td>
+        <td>
+          <button
+                  type="button"
+                  class="btn btn-link btn-rounded btn-sm fw-bold"
+                  data-mdb-ripple-color="dark"
+                  >
+            Edit
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+</div>
+  </section> {% endcomment %}
+{% endblock main-content  %}

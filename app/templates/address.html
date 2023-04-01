@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}login{% endblock title %}
+{% block main-content %}
+
+
+
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                    class="rounded-circle img-fluid" style="width: 150px;">
+                <h5 class="my-3">{{ user.username }}</h5>
+                <div class="d-flex justify-content-center mb-2">
+                    <button type="button" class="btn cap" data-toggle="modal" data-target="#deletModal">
+                        Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="post" action="" class="account-form" name="address_form" enctype="multipart/form-data">
+        {% if from.error%}
+        <div class="alert alert-primary" role="alert">
+            Errror: Plese try agin
+            {% endif %}
+            {% csrf_token %}
+            <label class="small fw-bold">{{ form.full_name.label }}</label>
+            {{ form.full_name }}
+            <label class="small fw-bold">{{ form.phone.label }}</label>
+            {{ form.phone }}
+            <label class="small fw-bold">{{ form.state.label }}</label>
+            {{ form.state }}
+            <label class="small fw-bold">{{ form.city.label }}</label>
+            {{ form.city }}
+            <label class="small fw-bold">{{ form.pincode.label }}</label>
+            {{ form.pincode }}
+            <label class="small fw-bold">{{ form.house_name.label }}</label>
+            {{ form.house_name }}
+            <button class="btn btn-primary btn-block py-2 mb-4 mt-4 fw-bold w-100" type="button" value="submit" onclick="submitform()">Add Address</button>
+
+    </form>
+</div>
+<script>
+function submitform() {
+    var form = document.getElementsByName("address_form")[0];
+    form.submit();
+    from.reset();
+    return false;
+}
+</script>
+
+{% endblock main-content %}
+
+
+<!--  <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Full name</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">hghfg</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Phone</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">bdhgbdhg</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Pincode</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">gjdkfhgj</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">State</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">hjhjhgd</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">City</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">ccccc</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">House name</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">fuhgiiu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->

@@ -1,0 +1,34 @@
+
+
+
+.fullpage{
+    width: 100%;
+    height: 100rem;
+}
+
+.sec1{
+    height: 3rem;
+}
+.imgsize{
+
+  height: 30rem;
+  width: 30rem;
+}
+
+.card-img-top {
+    height: 10 rem; /* Set the height of your image */
+    object-fit: cover; /* Ensure the image covers the entire container */
+  }
+  
+  .card-body {
+    text-align: center; /* Center the content inside the card body */
+  }
+  
+  .btn {
+    margin-top: 20px; /* Add some spacing between the image and the button */
+  }
+
+
+
+  
+  

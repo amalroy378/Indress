@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+
+
+{% block banner_slider %} 
+
+<div id="carouselExample" class="carousel slide">
+  <div class="carousel-inner">
+    {% for h in home %}
+    <div class="carousel-item  {% if h.id ==  3%}active{% endif %}">
+      <img src="{{ h.carousel_img.url }}" class="d-block w-100 banner-image" alt="sorry">
+    </div>
+
+    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+      <div class="p-3" style="max-width: 700px;">
+          <h4 class="text-light text-uppercase font-weight-medium mb-3">{{ h.carousel_text }}</h4>
+          
+      </div>
+  </div>
+  <style>
+    .carousel-caption {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+    }
+    .carousel-caption h1 {
+      font-size: 3rem;
+      text-align: center;
+    }t
+  </style>
+
+  {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<style>
+  .banner-image{
+    height:600px;
+  }
+</style>  
+
+  
+{% endblock banner_slider %}
+
+
+
+
+
+
+{% block sec1 %}
+<div  class="sec1">
+    <div class="row bg-dark text-center   text-white border-bottom shadow">
+        <h1>February Specials</h1>
+    </div>
+</div>
+<br>
+
+<div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
+  
+</div>
+
+
+<div class="btn-group">
+  <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Sort
+  </button>
+  <ul class="dropdown-menu">
+    <form action="" method="get">
+      <a class="dropdown-item" href="?sort_by=price_low_to_high">Sort by Price: Low to High</a>
+      <a class="dropdown-item" href="?sort_by=price_high_to_low">Sort by Price: High to Low</a>
+      <a class="dropdown-item" href="?sort_by=name_a_to_z">Sort by Name: A to Z</a>
+      <a class="dropdown-item" href="?sort_by=name_z_to_a">Sort by Name: Z to A</a>
+      </form>
+  </ul>
+</div>
+
+{% endblock sec1 %}
+
+
+
+
+
+{% block main-content %}
+
+
+        
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% if products %}
+  {% for product in products %}
+   <div class="col">
+    <div class="card">
+      
+      <a href="{{product.get_url }}" > <img src="{{product.images.url}}"  class="card-img-top   mx-auto d-block " alt="Image"   style="width: 20rem; height: 18rem;"></a>
+      
+      <div class="card-body">
+        <a href="{{product.get_url }} " ><p class="card-text">{{product.product_name}}</p></a>
+
+        <div class="price mt-1">₹{{product.price}}</div>
+        <div class="description mt-1">{{product.description}}</div>
+      
+        
+        <!-- {% comment %} <a href="{% url 'product_details_view' h.id %}" class="btn btn-primary">Quick View</a> {% endcomment %} -->
+      </div>
+    </div>
+   </div>
+
+  {% endfor %}
+
+  {% else %}
+  <div><h2>No result found</h2></div> 
+  {% endif %}
+
+</div>
+<br>  
+<br>  
+<br>  
+<br>  
+
+<!-- 
+{% comment %} <div class="card-container d-flex justify-content-center "  style="width: 24rem; padding-top: 15rem;">
+  {% for h in home %}
+   
+    <div class="card m-3"  style="width: 24rem; height: 15rem; ">
+      <div>
+        <img src="{{h.dress_img.url}}"  class="card-img-top  " alt="Image">
+      </div>  
+        <div class="card-body">
+         
+          
+          <p class="card-text">{{h.dress_name}}</p>
+          <a href="{% url 'product_details_view' %}" class="btn btn-primary">Quick View</a>
+        </div>
+    </div> -->
+
+      
+
+<!--       
+      {% endfor %}
+    </div>
+   
+</div> {% endcomment %} -->
+   
+<!-- {% comment %} 
+<style>
+    .img-section img {
+      height: 25rem;
+    }
+    .first-image {
+      width: 100%;
+      max-width: 75%;
+      height: auto;
+    }
+    .second-image {
+     
+      max-width: 25%;
+      height: auto;
+    }
+  </style>
+  
+  <div class="container-fluid">
+    <div class="row img-section">
+      <div class="col-9 p-0">
+        <img src="{% static 'app/images/product/s2.jpg' %}" class="img-fluid first-image" alt="Photo 1">
+      </div>
+      <div class="col-3 p-0">
+        <img src="{% static 'app/images/product/s.jpg' %}" class="img-fluid second-image" alt="Photo 2">
+      </div>
+    </div>
+  </div>
+ {% endcomment %}
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+{% comment %} 
+
+{% comment %} <style>
+    .img-section img {
+      height: 25rem;
+      width: auto;
+    }
+  </style>
+  
+  <div class="container-fluid">
+    <div class="row img-section">
+      <div class="col-9 p-0">
+        <img src="{% static "app/images/product/s2.jpg"%}" class="img-fluid" alt="Photo 1">
+      </div>
+      <div class="col-3 p-0">
+        <img src="{% static "app/images/product/s.jpg"%}" class="img-fluid" alt="Photo 2">
+      </div>
+     
+    </div>
+  </div> {% endcomment %}
+  -->
+
+
+
+
+
+
+<!-- 
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-9 p-0">
+        <img src="{% static "app/images/product/s2.jpg"%}" class="img-fluid" alt="Photo 1">
+      </div>
+      <div class="col-3 p-0">
+        <img src="{% static "app/images/product/s.jpg"%}" class="img-fluid" alt="Photo 2">
+      </div>
+    </div>
+</div> -->
+  
+
+          
+          
+
+
+ 
+
+
+{% endblock main-content  %}
+ 

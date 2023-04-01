@@ -1,0 +1,55 @@
+{% extends 'base_category.html' %}
+{% load static %}
+{% block title %}Kids Page{% endblock title %}
+
+
+
+
+
+{% block banner_slider %} 
+
+<div id="carouselExampleFade" class="carousel slide carousel-fade">
+    {% for k in kids %}
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{{k.carousel_img.url}}" class="d-block w-100" alt="...">
+        <div class="carousel-caption"><h1>{{ k.carousel_text }}</h1></div>
+      </div>
+    </div>
+    {% endfor %}
+    
+   
+</div>
+<style>
+    .carousel-caption {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+      }
+      .carousel-caption h1 {
+        font-size: 3rem;
+        text-align: center;
+      }
+      
+</style>
+  
+  
+{% endblock banner_slider %}
+ 
+ 
+ 
+  {% block main-content %}  {% endblock main-content %}
+
+
+
+
+
+
+ 

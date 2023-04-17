@@ -8,7 +8,8 @@ urlpatterns = [
 
   path('category/<slug:category_slug>/',men, name='products_by_category'),
   path('category/<slug:category_slug>/<slug:product_slug>/',product_detail,name='product_detail'),
-  
+  # path('category/<slug:category_slug>/<slug:product_slug>/<int:product_id>/',product_detail, name='product_detail'),
+
   path('submit_review/<int:product_id>/',submit_review,name='submit_review'),
  
 

@@ -9,7 +9,7 @@
 <div id="carouselExample" class="carousel slide">
   <div class="carousel-inner">
     {% for h in home %}
-    <div class="carousel-item  {% if h.id ==  3%}active{% endif %}">
+    <div class="carousel-item  active">
       <img src="{{ h.carousel_img.url }}" class="d-block w-100 banner-image" alt="sorry">
     </div>
 
@@ -100,23 +100,31 @@
 {% block main-content %}
 
 
-        
 <div class="row row-cols-1 row-cols-md-3 g-4">
   {% if products %}
   {% for product in products %}
-   <div class="col">
-    <div class="card">
+   <div class="col d-flex justify-content-center">
+    <div class="card product-card  ms-5">
       
-      <a href="{{product.get_url }}" > <img src="{{product.images.url}}"  class="card-img-top   mx-auto d-block " alt="Image"   style="width: 20rem; height: 18rem;"></a>
+      <a href="{{product.get_url }}" >
+        <img src="{{product.images.url}}" class="card-img-top product-card-img" alt="{{product.product_name}}">
+      </a>
       
-      <div class="card-body">
-        <a href="{{product.get_url }} " ><p class="card-text">{{product.product_name}}</p></a>
+      <div class="card-body product-card-body">
+        <a href="{{product.get_url }} ">
+          <h5 class="card-title product-card-title">{{product.product_name}}</h5>
+        </a>
 
         <div class="price mt-1">₹{{product.price}}</div>
         <div class="description mt-1">{{product.description}}</div>
       
+        <!-- Add a hover effect for the image -->
+        <div class="product-card-img-overlay">
+          <a href="{{product.get_url }}">
+            <span class="product-card-hover-btn">View Details</span>
+          </a>
+        </div>
         
-        <!-- {% comment %} <a href="{% url 'product_details_view' h.id %}" class="btn btn-primary">Quick View</a> {% endcomment %} -->
       </div>
     </div>
    </div>
@@ -128,6 +136,77 @@
   {% endif %}
 
 </div>
+
+<style>
+  .product-card {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    max-height: 500px;
+    max-width:400px;
+    overflow: hidden;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-card-img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
+  
+  .product-card-body {
+    padding: 1rem;4
+  
+  }
+  
+  .product-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .product-card-img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .product-card:hover .product-card-img-overlay {
+    opacity: 1;
+  }
+  
+  .product-card-hover-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .product-card-hover-btn:hover {
+    background-color: #555;
+  }
+  
+  
+</style>  
 <br>  
 <br>  
 <br>  

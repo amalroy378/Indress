@@ -6,8 +6,26 @@ from .models import Order,OrderProduct,Payment
 import datetime
 import razorpay
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render,redirect,get_object_or_404
+from eachcategorypages.models import Product
 # Create your views here.
+@login_required(login_url='login')
+def payment(request):
+    
+    order=Order.objects.get(user=request.user,is_ordered=False)
+    payment=Payment(
+        user=request.user,
+        
+    )
+    
+    
+    return render(request,'order_show.html')
+
+
+
+
+@login_required(login_url='login')
 def place_order(request,total=0,quantity=0):
     current_user=request.user
 
@@ -72,17 +90,41 @@ def place_order(request,total=0,quantity=0):
             return redirect('checkout')
         else:
             return redirect('checkout')
+   
+    
+def _cart_id(request):
+    cart=request.session.session_key
+    if not cart:
+        cart=request.session.create()
+    return cart    
 
 
 
+@login_required(login_url='login')
+def order_show(request,total=0,quantity=0,cart_items=None):
 
-def order_show(request):
-
-        # orderproduct =OrderProduct.objects.filter(user=request.user)
+        cart=Cart.objects.get(cart_id=_cart_id(request))
+        
+        cart_items=CartItem.objects.filter(cart=cart,is_active=True)
+        
+        order =Order.objects.filter(user=request.user).last()
         context={
-
-
-        # 'orderproduct': orderproduct,
-        }
+             'order':order,
+            'cart_items':cart_items,
+            }
 
         return render(request,'order_show.html',context)
+    
+    
+    
+    
+
+def remove_cart_item(request,product_id):
+    cart=Cart.objects.get(cart_id=_cart_id(request))
+    product=get_object_or_404(Product,id=product_id)
+    cart_item=CartItem.objects.filter(product=product,cart=cart)
+    
+    cart_item.delete()
+    return redirect('cart')
+
+    

@@ -13,18 +13,31 @@ from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 from django.contrib import messages
 from .forms import ReviewForm
 from .models import ReviewRating
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
+
 def men(request,category_slug=None):
     categories=None
     products=None
+    products=Product.objects.all().filter(is_available=True).order_by('id')
+    
+    sort_by = request.GET.get('sort_by')
+    if sort_by == 'name_a_to_z':
+        products = products.order_by('product_name')
+    elif sort_by == 'name_z_to_a':
+        products = products.order_by('-product_name')
+    elif sort_by == 'price_low_to_high':
+        products = products.order_by('price')
+    elif sort_by == 'price_high_to_low':
+        products = products.order_by('-price')
 
     if category_slug!=None:
         categories=get_object_or_404(Category,slug=category_slug)
         products=Product.objects.filter(category=categories,is_available=True)
-        paginator=Paginator(products,4)
+        paginator=Paginator(products,6)
         page=request.GET.get('page')
         paged_products=paginator.get_page(page)
         product_count=products.count()
@@ -85,7 +98,6 @@ def product_detail(request,category_slug,product_slug):
     
     except Exception as e:
         raise e
-    print(single_product)
     products=ProImage.objects.filter(product=single_product)
     
     #review only  for the purchased customers
@@ -111,37 +123,7 @@ def product_detail(request,category_slug,product_slug):
 
     return render(request,'product_detail.html',context)
 
-
-
-
-# def submit_review(request,product_id):
-#     url=request.META.get('HTTP_REFERER')
-#     if request.method == 'POST':
-#         try:
-#             review=ReviewRating.objects.get(user__id=request.user.id,product__id=product_id)
-#             form=ReviewForm(request.POST,instance=review)
-#             form.save()
-#             messages.success(request,'Thank you! Your review has been updated.')
-#             return redirect(url)
-
-#         except ReviewRating.DoesNotExist:
-#             form=ReviewForm(request.POST)
-#             if form.is_valid():
-#                 data=ReviewRating()
-#                 data.subject=form.cleaned_data['subject']
-#                 data.rating=form.cleaned_data['rating']
-#                 data.review=form.cleaned_data['review']
-#                 data.ip=request.META.get('REMOTE_ADDR') 
-#                 data.product_id=product_id
-#                 data.user_id=request.user.id
-#                 data.save()
-#                 messages.success(request,'Thank you! Your review has been submitted.')
-#                 return redirect(url)
-
-
-                 
-
-
+@login_required(login_url='login')
 def submit_review(request, product_id):
     url = request.META.get('HTTP_REFERER')
     if request.method == 'POST':

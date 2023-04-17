@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}User Profile{% endblock title %}
+
+
+{% block main-content %}
+
+
+<section style="background-color: #f7f7f7;">
+    <div class="container py-5">
+        <div class="row mt-5">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4" style="background-color: #ffffff;">
+
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body text-center m-4">
+                        <h3 class="mt-3">Hi <b>{{user.username}}</b>...</h3>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4 py-1" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body">
+        
+                        {% include 'alerts.html' %}
+                        <hr>
+                        <div class="row mt-1">
+                            <div class="col-sm-3">
+                                <p class="mb-0" style="font-weight: bold;">Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{user.username}}</p>
+                            </div>
+
+
+                        </div>
+                       
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0" style="font-weight: bold;">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{user.email}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        
+                        <hr>
+                        <a href="{% url 'edit_profile' user.id %}" class="btn btn-outline-dark py-2" style="border-radius: 5px;">Edit Profile</a>
+                        <a href="{% url 'change_password' user.id %}" class="btn btn-outline-dark py-2" style="border-radius: 5px;">Edit Password</a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+<section>
+    
+    {% if user_addresses %}
+    <nav aria-label="breadcrumb mb-0" class="bg-light rounded-3 p-3 mb-4">
+
+        <h3 class="text-center">Your Address</h3>
+    </nav>
+    {% endif %}
+
+    {% for a in user_addresses %}
+    {% if not a.id == default.default.id %}
+    <!-- <h3>{{forloop.counter}} address {{default.default.id}}</h3> -->
+    <div class="card mb-3">
+        <div class="card-body">
+            {% if a.default %}
+            Default
+            <hr>
+            {% endif %}
+            <h5 class="card-title">{{a.house_name}}, {{a.pincode}}</h5>
+            <p class="card-text">{{a.city}}, </p>
+            <div>
+
+
+                <a class="btn btn-primary" href="{% url 'edit_address' a.id 1 %}">
+                    Edit
+                </a>
+
+                <a class="btn cap btn-primary" data-bs-toggle="modal" data-bs-target="#delete_model-{{forloop.counter}}"
+                    href="{% url 'delete_address' a.id 1 %}">
+                    Delete
+                </a>
+                {% if a.default %}
+               
+                {% else %}
+                <a class="btn btn-primary" href="{% url 'default_address' a.id 1 %}">
+                    Default
+                </a>
+                {% endif %}
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="delete_model-{{forloop.counter}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title text-dark fs-5" id="exampleModalLabel">
+                                    Delete Address</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                are you sure to delete <span class="text-danger">"{{a.house_name}}"</span>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                                <form action="{% url 'delete_address' a.id 1  %}" style="float: right;" method="post" class="float-right d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <div class="center-container">
+        <a class="btn cap btn-primary" href="{% url 'add_address' %}">Add new address</a>
+    </div>
+    <style>
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10vh; /* Adjust this value to center the button vertically */
+          }
+          
+          .btn {
+            /* Add your button styles here */
+          }
+          
+    </style>    
+    <br>
+    <br>
+</div>
+</section>
+
+
+{% endblock main-content %}

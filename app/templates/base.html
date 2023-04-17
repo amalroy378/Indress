@@ -55,7 +55,7 @@
             
             <form class="d-flex " role="search" action="{% url 'search' %}" method="GET"> 
               <input class="form-control me-4 mx-2 " type="search" placeholder="Search for products,brands and more" aria-label="Search" name="keyword">
-              <button class="btn btn-outline-success text-light " type="submit">Search</button>
+              <button class="btn btn-outline text-light mx-2  mt-1 " type="submit">Search</button>
             </form>
             
 
@@ -83,10 +83,12 @@
                 <i class="fa fa-shopping-cart"></i> <span class="badge badge-pill bagde-danger notify">{{cart_count}}</span>
               </div>  
             </a>
+            <a class="nav-link text-light mx-2" href="{% url 'order_show' %}">Orders</a>
             
           <a class="nav-link text-light mx-2" href="{% url 'wishlist' %}">Favourites</a>
 
-            <a href="{% url 'logout' %}" class="btn btn-outline-success mx-2  " type="button">Logout</a>
+          
+          <a class="nav-link text-light mx-2" href="{% url 'logout' %}">Logout</a>
             
             
             
@@ -108,25 +110,25 @@
         {% if products.has_other_pages  %}
       <ul class="pagination">
         {% if products.has_previous %}
-        <li class="page-item "><a href="?page={{products.previous_page_number}}" class="page-link">previous</a></li>
+        <li class="page-item "><a style="z-index: 0!important;" href="?page={{products.previous_page_number}}" class="page-link">previous</a></li>
         {% else %}
         <li class="page-item disabled"><a href="#" class="page-link">previous</a></li>
         {% endif %}
         
         {% for i in products.paginator.page_range %}
           {% if products.number == i %}
-            <li class="page-item active"><a href="#" class="page-link">{{i}}</a></li>
+            <li class="page-item active"><a style="z-index: 0!important;" href="#" class="page-link">{{i}}</a></li>
           {% else %}
       
-            <li class="page-item "><a href="?page={{i}}" class="page-link">{{i}}</a></li>
+            <li class="page-item "><a style="z-index: 0!important;" href="?page={{i}}" class="page-link">{{i}}</a></li>
           {% endif %} 
         {% endfor %}
         
         
         {% if products.has_next %}
-        <li class="page-item "><a href="?page={{products.next_page_number}}" class="page-link">Next</a></li>
+        <li class="page-item "><a style="z-index: 0!important;" href="?page={{products.next_page_number}}" class="page-link">Next</a></li>
         {% else %}
-        <li class="page-item  disabled "><a href="#" class="page-link">Next</a></li>  
+        <li class="page-item  disabled "><a style="z-index: 0!important;" href="#" class="page-link">Next</a></li>  
       
         {% endif %}
       
@@ -141,32 +143,26 @@
       <br>
       <br>
       <br>
-     
-     {% comment %} <footer class="bg-dark text-center text-lg-start footer ">
+   
+      <footer class="bg-dark text-center text-lg-start  footer">
         <!-- Copyright -->
         <div class="text-center p-3 text-white">
-          © 2020 Copyright:
-          <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+          © 2023 Copyright:
+          <a class="text-dark" href="https://mdbootstrap.com/">INDRESS.COM</a>
         </div>
         <!-- Copyright -->
+        <style>
+          .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+          }
+          </style>
       </footer>
-
-      <style>
-        .footer {
-          
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          
-          
-          text-align: center;
-        }
-        </style> 
-         {% endcomment %}
-        
-
-
-
 
 
 

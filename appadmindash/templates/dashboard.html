@@ -7,8 +7,8 @@
 
 
 
-<div class="row">
-    <div class="col-md-3">
+<div class="row  ">
+    <div class="col-md-3 container ml-3">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Total Users</h5>
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 container">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Total Products</h5>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3  container">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Total Orders</h5>
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3  container">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Total Revenue</h5>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
   <style>
     .row {
@@ -48,12 +48,19 @@
       }
       
       .card {
+        width:300px;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         margin-bottom: 30px;
       }
       
+      .container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
       .card-title {
         font-size: 20px;
         font-weight: bold;
@@ -126,29 +133,72 @@
 		}
 	</style>
 </head>
-	<div class="container">
-		<h1>Order Details</h1>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Product ID</th>
-					<th>Product Name</th>
-					<th>Category</th>
-					<th>Stock</th>
-				</tr>
-			</thead>
+
+
+<div class="" id="productTable">
+  <h1>Product Details</h1>
+  <table class="table" id="dataTable"> <!-- Added an ID to the table for initializing the DataTable plugin -->
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for p in product %}
-			<tbody>
-				<tr>
-					<td>{{p.id}}</td>
-					<td>{{p.product_name}}</td>
-					<td>{{p.category}}</td>
-					<td>{{p.stock}}</td>
-				</tr>	
-			</tbody>
+      <tr>
+        <td>{{p.id}}</td>
+        <td>{{p.product_name}}</td>
+        <td>{{p.category}}</td>
+        <td>{{p.stock}}</td>
+      </tr>
       {% endfor %}
-		</table>
-	</div>
+    </tbody>
+  </table>
+  {% comment %} <button type="button" id="pdfBtn">Download</button> {% endcomment %}
+
+  <script>
+    $(document).ready(function() {
+      $('#dataTable').DataTable(); // Initialize DataTable plugin on the table
+   
+
+    // Trigger PDF download
+    $('#pdfBtn').on('click', function() {
+      // Create a new jsPDF instance
+      var doc = new jsPDF();
+
+      // Get the table data as an array of arrays using DataTable plugin
+      var data = $('#dataTable').DataTable().rows().data().toArray();
+
+      // Convert the table data to a format compatible with jsPDF
+      var rows = [];
+      for (var i = 0; i < data.length; i++) {
+        var row = [];
+        for (var j = 0; j < data[i].length; j++) {
+          row.push(data[i][j]);
+        }
+        rows.push(row);
+      }
+
+      // Define the table columns and options
+      var columns = ["Product ID", "Product Name", "Category", "Stock"];
+      var options = {
+        startY: 20
+      };
+
+      // Add the table data to the PDF
+      doc.autoTable(columns, rows, options);
+
+      // Save the PDF as a file
+      doc.save('product_details.pdf');
+    });
+  });
+  </script>
+</div>
+
+
 
 
 
@@ -160,7 +210,6 @@
   <br>
   <br>
   <br>
-
 
 
 

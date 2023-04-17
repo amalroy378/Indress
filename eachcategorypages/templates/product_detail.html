@@ -64,35 +64,57 @@
 
 
             <p>{{ single_product.description }}</p>
-            <label for="color-select">Choose a color :</label>
-            <select name='color' class="form-control" id="color-select" required>
-                <option value="" disabled selected> Select</option>
-                {% for i in single_product.variation_set.colors %}
-                <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
-                {% endfor %}
-            </select>
-            <label for="size-select">Choose a size:</label>
-            <select name='size' class="form-control" id="size-select">
-                <option value="" disabled selected> Select</option>
-                {% for i in single_product.variation_set.sizes %}
-                <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
-                {% endfor %}
-            </select>
-            <h3>₹{{ single_product.price}}</h3>
-            {% if single_product.stock <= 0 %}
-            <h5 class="text-danger">Out of stock</h5>
-            {% else %}
-            {% if in_cart %}
-            <a href="#" class="btn btn-success">Added to Cart</a>
-            <a href="{% url 'cart' %}" class="btn btn-outline-primary">View Cart</a>
-            {% else %}
-            <a href="{% url 'add_cart' single_product.id %}"><button type="submit" class="btn btn-primary">Add to Cart</button></a>
-            <a href="{% url 'add_wishlist' single_product.id %}" class="btn_3"><button type="button" class="btn btn-primary mr-2">add to wishlist</button></a>
+            <form action="{% url 'add_cart' single_product.id %}">
+                <label for="color-select">Choose a color :</label>
+                <select name='color' class="form-control" id="color-select" required>
+                    <option value="" disabled selected> Select</option>
+                    {% for i in single_product.variation_set.colors %}
+                    <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
+                    {% endfor %}
+                </select>
+                <label for="size-select">Choose a size:</label>
+                <select name='size' class="form-control" id="size-select">
+                    <option value="" disabled selected> Select</option>
+                    {% for i in single_product.variation_set.sizes %}
+                    <option value='{{i.variation_value | lower}}'>{{i.variation_value | capfirst}}</option>
+                    {% endfor %}
+                </select>
+                <h3>₹{{ single_product.price}}</h3>
+                {% if single_product.stock <= 0 %}
+                <h5 class="text-danger">Out of stock</h5>
+                {% else %}
+                {% if in_cart %}
+                <a href="#" class="btn btn-success">Added to Cart</a>
+                <a href="{% url 'cart' %}" class="btn btn-outline-primary">View Cart</a>
+                {% else %}
+                
+                <button id="addcart_btn" type="submit" class="btn btn-primary">Add to Cart</button>
+               
+                <a href="{% url 'add_wishlist' single_product.id %}" class="btn_3"><button type="button" class="btn btn-primary mr-2">add to wishlist</button></a>
+
+
+            </form>
+            
             {% endif %}
             {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+    
+    document.getElementById("addcart_btn").addEventListener("click", function(event){
+        color = document.getElementById('color-select').value
+        size = document.getElementById('size-select').value
+        console.log('color and size'+color+' '+size)
+        if (!color || !size){
+            event.preventDefault()
+            alert('Select variation')
+        }
+
+      });
+
+</script>
 
 <!--review and rating-->
 

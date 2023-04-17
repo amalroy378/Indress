@@ -84,3 +84,8 @@ class Address(models.Model):
     class Meta:
         verbose_name='Address'
         verbose_name_plural='Addresses'
+        
+        
+class User_Profile(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    img=models.ImageField(upload_to='profile_image')        

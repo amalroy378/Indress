@@ -4,19 +4,53 @@ from django.contrib.auth.models import User
 from django.contrib import messages,auth
 from django.urls import reverse
 from .forms import UserAddressForm
+from .models import User_Profile
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required(login_url='login')
 def user_profile(request):
+    try:
+        profile_pic = User_Profile.objects.get(user=request.user)
+    except:
+         profile_pic = None
+         
+          
     context = {
-        'user_addresses': Address.objects.filter(user=request.user)
+        'user_addresses': Address.objects.filter(user=request.user),
+        'profile_pic' : profile_pic,
     }
-    return render(request,'user_profile.html',context)
+    return render(request, 'user_profile.html', context)
 
 
 
+    
+
+@login_required(login_url='login')
+def change_dp(request):
+     
+     user_id = request.user.id
+     user = User.objects.get(id=user_id)
+    
+     try:
+          user_profile = User_Profile.objects.get(user=user)
+     except:
+          user_profile = User_Profile.objects.create(user=user)
+          
+     img = request.FILES['user_image']
+     user_profile.img=img
+     user_profile.user = request.user
+     user_profile.save()
+
+          
+     return redirect('user_profile')
+    
+    
+    
 
 
+@login_required(login_url='login')
 def edit_profile(request, user_id):
     if request.method == 'POST':
         username = request.POST['username']
@@ -32,6 +66,7 @@ def edit_profile(request, user_id):
 
 
 
+@login_required(login_url='login')
 def change_password(request, user_id):
     if request.method == 'POST':
         old_password = request.POST['old_password']
@@ -56,6 +91,7 @@ def change_password(request, user_id):
         
 
 
+@login_required(login_url='login')
 def view_address(request):
      addresses = Address.objects.filter(full_name=request.user)
      print(addresses)
@@ -65,6 +101,7 @@ def view_address(request):
      return render(request,"user_profile.html",context)
 
 
+@login_required(login_url='login')
 def add_address(request):
      if request.method == "POST":
           address_form = UserAddressForm(data=request.POST)
@@ -82,6 +119,7 @@ def add_address(request):
 
 
 
+@login_required(login_url='login')
 def edit_address(request,id,num):
      if request.method == "POST":
           address=Address.objects.get(pk=id,user=request.user)
@@ -100,6 +138,7 @@ def edit_address(request,id,num):
      return render(request,"address.html",{"form": address_form})
 
              
+@login_required(login_url='login')
 def delete_address(request,id,nam):
     address=Address.objects.get(pk=id,user=request.user)
     address.delete()
@@ -107,8 +146,10 @@ def delete_address(request,id,nam):
          return redirect('user_profile')
     elif nam == 2:
          return redirect('checkout')
+    
 
       
+@login_required(login_url='login')
 def default_address(request,id,new):
     Address.objects.filter(user=request.user,default=True).update(default=False)
     Address.objects.filter(pk=id,user=request.user).update(default=True)

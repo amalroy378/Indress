@@ -1,0 +1,49 @@
+{% extends 'base_category.html' %}
+{% load static %}
+{% block title %}Cart Page{% endblock title %}
+
+
+{% block main-content %} 
+
+    <div class="container">
+      <h1>My Orders</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Order Name</th>
+            <th>Price</th>
+            <th>Address</th>
+            <th>Cancel Order</th>
+          </tr>
+        </thead>
+    
+        <tbody>
+      {% for cart_item in cart_items %}
+          <tr>
+            <td>{{order.order_number}}</td>
+            <td>{{cart_item.product.product_name }}</td>
+            <td>{{cart_item.product.price}}</td>
+            <td>{{order.address_line_1 }}</td>
+            <td> 
+             <a href="{% url  'remove_cart_item' cart_item.product_id %}"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}"></a>
+                Cancel
+              </button>   </td>
+          </tr>
+      {% endfor %}
+        </tbody>
+   
+      </table>
+    </div>
+ 
+    {% endblock main-content %}
+
+
+
+
+
+
+
+
+
+

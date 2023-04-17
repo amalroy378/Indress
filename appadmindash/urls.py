@@ -9,7 +9,7 @@ urlpatterns = [
  path('delete_product/<int:product_id>',product_delete,name='delete_product'),
  path('edit/<int:product_id>',edit_product,name='edit_product'),
  path('add_product',add_product,name='add_product'),  
- path('userlist/',userlist,name='user_list'),
+ path('userlist/',userlist,name='userlist'),
  path('block_unblock/<int:id>',block_unblock,name="block_unblock"),
  path('categorylist/',categorylist,name='categorylist'),
  
@@ -21,7 +21,10 @@ urlpatterns = [
  path('my_bar_chart_view/',my_bar_chart_view,name='my_bar_chart_view'),
 #  path('sales/',sales,name='sales')
 
+path('banner_management/',banner_management,name='banner_management'),
 
+path('banner_delete/<int:carousel_id>',banner_delete,name='banner_delete'),
 
+path('banner_add',banner_add,name='banner_add'),
 
 ]

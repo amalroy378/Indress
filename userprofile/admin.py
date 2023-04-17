@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from . models import Account,Address
+from . models import Account,Address,User_Profile
 
 # Register your models here.
 
@@ -17,3 +17,4 @@ class AccountAdmin(UserAdmin):
 
 admin.site.register(Account,AccountAdmin)
 admin.site.register(Address)
+admin.site.register(User_Profile)

@@ -11,6 +11,10 @@ urlpatterns = [
     path('add_address',add_address, name='add_address'),  
 
     path('addresses/edit_address/<int:id>/<int:num>/', edit_address, name='edit_address'),   
+   
     path('addresses/delete_address/<int:id>/<int:nam>/', delete_address, name='delete_address'),   
+   
     path('addresses/default_address/<int:id>/<int:new>/', default_address, name='default_address'),   
+    
+    path('change_dp/', change_dp, name='change_dp'),   
 ]

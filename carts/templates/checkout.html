@@ -73,7 +73,7 @@
 
 	 <aside class="col-lg-6">
  
-		 <div class="card">
+		 <div class="card text-center">
 		 <div class="card-body">
 	   <table class="table table-borderless table-shopping-cart">
 	   <thead class="text-muted">
@@ -130,17 +130,19 @@
  
 	  <!-- <button type="submit" name="submit" class="btn btn-primary btn-block" id='rzp-button1'>Place Order</button>  -->
     
-	  <button type="submit" name="submit"   class="btn btn-primary w-100 mt-2" id='rzp-button1'>Razorpay</button>	
+	  <button type="submit" name="submit"   class="btn btn-primary w-50 mt-2" id='rzp-button1'>Razorpay Payment</button>	
 	  
-	  <a href="{% url 'home' %}" class="btn btn-light btn-block w-100 mt-3">Continue Shopping</a>
+	  
 
 	</div>  
 </form>
-<div class="mt-3">
+<div class="mt-3 text-center">
 	<form action="{% url 'cod' %}"   method="POST">
 		{% csrf_token %}
+	  <br>
+	  <button type="submit" name="cod" class="btn btn-success w-50">Cash on delivery</button>	
 	  
-	  <button type="submit" name="cod" class="btn btn-success w-100">Cash on delivery</button>	 
+	  <a href="{% url 'home' %}" class="btn btn-light btn-block w-50 mt-3">Continue Shopping</a>
 
 	</form>
 		 </div> <!-- card-body.// -->

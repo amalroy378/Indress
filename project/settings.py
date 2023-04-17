@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+# from decouple import config
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = []
 
 
@@ -88,11 +90,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME':config('db_name'),
-       'USER': config('db_user'),
-       'PASSWORD': config('db_pass'),
-       'HOST': config('db_host'),
-       
+       'NAME':os.getenv('db_name'),
+       'USER': os.getenv('db_user'),
+       'PASSWORD': os.getenv('db_pass'),
+       'HOST': os.getenv('db_host'),
    }
 }
 
@@ -141,14 +142,15 @@ MEDIA_ROOT=BASE_DIR/'uploads'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_URL=config('LOGIN_URL'),
-LOGIN_REDIRECT_URL=config('LOGIN_REDIRECT_URL'),
-EMAIL_BACKEND=config('EMAIL_BACKEND'),
-EMAIL_HOST=config('EMAIL_HOST'),
-EMAIL_PORT=config('EMAIL_PORT',cast=int),
-EMAIL_HOST_USER=config('EMAIL_HOST_USER'),
-EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD'),
-EMAIL_USE_TLS=config('EMAIL_USE_TLS',cast=bool),
+LOGIN_URL=os.getenv('LOGIN_URL'),
+LOGIN_REDIRECT_URL=os.getenv('LOGIN_REDIRECT_URL'),
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER=os.getenv('EMAIL_HOST_USER'),
+EMAIL_HOST_PASSWORD=os.getenv('EMAIL_HOST_PASSWORD'),
+EMAIL_USE_TLS=os.getenv('EMAIL_USE_TLS'),
+
 
 
 
@@ -159,5 +161,9 @@ MESSAGE_TAGS = {
 }
 
 
-RAZOR_KEY_ID = config('RAZOR_KEY_ID'),
-RAZOR_KEY_SECRET=config('RAZOR_KEY_SECRET'),
+# RAZOR_KEY_ID = config('RAZOR_KEY_ID'),
+# RAZOR_KEY_SECRET=config('RAZOR_KEY_SECRET'),
+
+
+RAZOR_KEY_ID = os.getenv('RAZOR_KEY_ID')
+RAZOR_KEY_SECRET=os.getenv('RAZOR_KEY_SECRET')

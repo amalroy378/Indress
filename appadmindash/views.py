@@ -5,13 +5,15 @@ from django.shortcuts import get_object_or_404
 
 
 from django.contrib import messages
-from app.models import dress
+from app.models import dress,carousel_Home
 from orders.models import Order,OrderProduct
 from django.db.models import Sum
 
 import matplotlib.pyplot as plt
 from django.http import HttpResponse
 from io import BytesIO
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
@@ -41,6 +43,8 @@ def index(request):
 
     return render(request,"index.html")
 
+
+@login_required(login_url='login')
 def productlist(request):
     if request.method == 'POST':
         search_text = 'etd'
@@ -110,7 +114,7 @@ def add_product(request):
 
 
 
-
+@login_required(login_url='login')
 def userlist(request):
     dict_user={
         'user':User.objects.all().order_by('id')
@@ -133,7 +137,7 @@ def block_unblock(request,id):
         return redirect(userlist)
 
 
-
+@login_required(login_url='login')
 def categorylist(request):
     dict_category = {
         'categories':Category.objects.all().order_by('id')
@@ -169,11 +173,11 @@ def delete_category(request,category_id):
     return redirect(categorylist)
 
 
-
+@login_required(login_url='login')
 def usermanagement(request):
     return render(request,"usermanagement.html") 
 
-
+@login_required(login_url='login')
 def dashboard(request):
     product_count=Product.objects.all()
     product_count=product_count.count()
@@ -212,7 +216,7 @@ def dashboard(request):
 
 
 
-
+@login_required(login_url='login')
 def my_bar_chart_view(request):
     # Sample data
 
@@ -295,3 +299,33 @@ def my_bar_chart_view(request):
 
 
 #     return render(request,'adminpanel/sales_report.html',context)
+
+
+
+@login_required(login_url='login')
+def banner_management(request):
+    
+    context={
+        'carousel':carousel_Home.objects.all().order_by('id'),
+    }
+    
+    return render(request,'banner_management.html',context)
+
+
+
+def banner_delete(request,carousel_id):
+    del_banner = carousel_Home.objects.filter(id=carousel_id)
+    del_banner.delete()
+    return redirect(banner_management)
+
+
+
+def banner_add(request):
+    print('TEXT ===============  ',request.POST['carousel_text'])
+    IMG = request.FILES['carousel_img']
+    carousel_text = request.POST['carousel_text']
+    new = carousel_Home.objects.create(carousel_img=IMG,carousel_text=carousel_text)
+    new.save()
+
+
+    return redirect(banner_management)

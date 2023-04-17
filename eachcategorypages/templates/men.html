@@ -54,6 +54,7 @@
     height: 3rem;
   }
   </style>
+
   
   <div  class="sec1">
     <div class="row bg-dark text-center   text-white border-bottom shadow">
@@ -61,6 +62,22 @@
     </div>
 </div>
 <br>
+
+
+<div class="btn-group">
+  <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Sort
+  </button>
+  <ul class="dropdown-menu">
+    <form action="" method="get">
+      <a class="dropdown-item" href="?sort_by=price_low_to_high">Sort by Price: Low to High</a>
+      <a class="dropdown-item" href="?sort_by=price_high_to_low">Sort by Price: High to Low</a>
+      <a class="dropdown-item" href="?sort_by=name_a_to_z">Sort by Name: A to Z</a>
+      <a class="dropdown-item" href="?sort_by=name_z_to_a">Sort by Name: Z to A</a>
+      </form>
+  </ul>
+</div>
+
 {% endblock text1 %}
 
 <header class="border-bottom mb-4 pb-3 p-3">
@@ -73,45 +90,129 @@
 {% block sub_category1 %}       
 
 
-       
-<div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% if products %}
   {% for product in products %}
-   <div class="col">
-    <div class="card">
+   <div class="col d-flex justify-content-center">
+    <div class="card product-card  ms-5">
       
-       <a href="{{product.get_url }}"><img src="{{product.images.url}}"  class="card-img-top   mx-auto d-block " alt="Image"   style="width: 20rem; height: 18rem;"></a?
+      <a href="{{product.get_url }}" >
+        <img src="{{product.images.url}}" class="card-img-top product-card-img" alt="{{product.product_name}}">
+      </a>
       
-      <div class="card-body">
-        <a href="{{product.get_url }}"> <p class="card-text">{{product.product_name}}</p></a>
+      <div class="card-body product-card-body">
+        <a href="{{product.get_url }} ">
+          <h5 class="card-title product-card-title">{{product.product_name}}</h5>
+        </a>
 
         <div class="price mt-1">₹{{product.price}}</div>
         <div class="description mt-1">{{product.description}}</div>
-
-
-        <a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details</a>
       
+        <!-- Add a hover effect for the image -->
+        <div class="product-card-img-overlay">
+          <a href="{{product.get_url }}">
+            <span class="product-card-hover-btn">View Details</span>
+          </a>
+        </div>style="z-index: 0!important;"
         
-        <!-- {% comment %} <a href="{% url 'product_details_view' h.id %}" class="btn btn-primary">Quick View</a> {% endcomment %} -->
       </div>
     </div>
+   </div>
+
   {% endfor %}
+
+  {% else %}
+  <div><h2>No result found</h2></div> 
+  {% endif %}
+
 </div>
 
+<style>
+  .product-card {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    max-height: 500px;
+    max-width:400px;
+    overflow: hidden;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-card-img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
+  
+  .product-card-body {
+    padding: 1rem;4
+  
+  }
+  
+  .product-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .product-card-img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .product-card:hover .product-card-img-overlay {
+    opacity: 1;
+  }
+  
+  .product-card-hover-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .product-card-hover-btn:hover {
+    background-color: #555;
+  }
+  
+  
+</style>  
 <nav class="mt-4" aria-label="Page Navigation Sample">
   {% if products.has_other_pages  %}
 <ul class="pagination">
   {% if products.has_previous %}
-  <li class="page-item "><a href="?page={{products.previous_page_number}}" class="page-link">previous</a></li>
+  <li class="page-item "><a  style="z-index: 0!important;" href="?page={{products.previous_page_number}}" class="page-link">previous</a></li>
   {% else %}
-  <li class="page-item disabled"><a href="#" class="page-link">previous</a></li>
+  <li class="page-item disabled"><a style="z-index: 0!important;" href="#" class="page-link">previous</a></li>
   {% endif %}
   
   {% for i in products.paginator.page_range %}
     {% if products.number == i %}
-      <li class="page-item active"><a href="#" class="page-link">{{i}}</a></li>
+      <li class="page-item active"><a  style="z-index: 0!important;" href="#" class="page-link">{{i}}</a></li>
     {% else %}
 
-      <li class="page-item "><a href="?page={{i}}" class="page-link">{{i}}</a></li>
+      <li class="page-item "><a  style="z-index: 0!important;" href="?page={{i}}" class="page-link">{{i}}</a></li>
     {% endif %} 
   {% endfor %}
   

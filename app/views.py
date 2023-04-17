@@ -37,7 +37,7 @@ def home(request):
         products = products.order_by('-price')
     
 
-    paginator=Paginator(products,9)
+    paginator=Paginator(products,6)
     page=request.GET.get('page')
     paged_products=paginator.get_page(page)
     
@@ -144,7 +144,6 @@ def signup(request, verify=None):
                         mess=f'Hello\t{usr.username},\nYour OTP to verify your account for INDRESS is {usr_otp}\nThanks!'
                         send_mail(
                                 "welcome to INDRESS E-commerce-Verify your Email",
-                            
                                 mess,
                                 settings.EMAIL_HOST_USER,
                                 [usr.email],
@@ -181,26 +180,32 @@ def product_details_view(request,dress_id):
     return render(request,'product_details_view.html')
 
 
-
-
 def search(request):
-    products=''
-    product_count=0
+    products = Product.objects.all()
+    sort_by = request.GET.get('sort_by')
 
     if 'keyword' in request.GET:
-        keyword=request.GET['keyword']
+        keyword = request.GET['keyword']
 
         if keyword:
-            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword)|Q(product_name__icontains=keyword) )
-            product_count=products.count()
-    context={
-        'products':products,
-        'product_count':product_count
-        
-     }    
+            if sort_by == 'name_a_to_z':
+                products = products.order_by('product_name')
+            elif sort_by == 'name_z_to_a':
+                products = products.order_by('-product_name')
+            elif sort_by == 'price_low_to_high':
+                products = products.order_by('price')
+            elif sort_by == 'price_high_to_low':
+                products = products.order_by('-price')
 
-    return render(request,'home.html',context)
+            products = products.filter(Q(description__icontains=keyword)|Q(product_name__icontains=keyword) )
+    
+    product_count = products.count()
+    context = {
+        'products': products,
+        'product_count': product_count
+    }    
 
+    return render(request, 'home.html', context)
 
 
 #========== errors==============

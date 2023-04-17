@@ -1,0 +1,117 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Banner Management{% endblock title %}
+
+{% block main-content %}
+
+<!-- Button trigger modal -->
+<a type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#banner_add">
+    <i title="Add Banner" class="fa fa-plus">Add Banner</i>
+  </a>
+  
+  <!--Add category  Modal -->
+  <div class="modal fade" id="banner_add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Banner</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'banner_add'%}" enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+  
+  
+          <div class="form-outline mb-4">
+            <input required name="carousel_img" type="file"  class="form-control"/>
+          </div>
+  
+          <div class="form-outline mb-4">
+            <input required name='carousel_text'  type="text" id="form3Example3cg" class="form-control form-control-lg" />
+            <label class="form-label" for="form3Example3cg">Banner Text</label>
+          </div>
+          <div class="d-flex justify-content-center">
+            <button type="submit"
+              class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+          </div>
+  
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+
+
+
+
+
+<div class="container mt-5">
+    <h1 class="text-center">Banner Management</h1>
+    <table class="table table-bordered table-striped mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Banner ID</th>
+                <th scope="col">Banner Image</th>
+                <th scope="col">Banner Text</th>
+                <th scope="col">Banner Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in carousel %}
+            <tr>
+                <td>{{c.id}}</td>
+                <td><img src="{{c.carousel_img.url}} " alt="Banner 1" class="img-fluid banner-image"></td>
+                <td>{{c.carousel_text}}</td>
+                <td>
+
+
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">
+                        Delete
+                      </button>
+
+                      <!-- Modal  for delete the product -->
+                      <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              delete product {{c.carousel_text}}
+                            </div>
+                            <div class="modal-footer">
+                              <form action="{% url 'banner_delete' c.id %}" >
+                                <button type="submit" class="btn btn-danger">Confirm</button>
+                              </form>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                </td>
+            </tr>
+            {% endfor %}
+
+
+
+
+
+
+
+<style>
+    /* Custom CSS for banner image size */
+    .banner-image {
+        width: 200px; /* Set the desired width */
+        height: 100px; /* Set the desired height */
+        object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+    }
+</style>
+
+
+
+{% endblock main-content %}

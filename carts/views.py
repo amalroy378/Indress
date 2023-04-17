@@ -93,18 +93,23 @@ def _cart_id(request):
 def add_cart(request,product_id):
     current_user = request.user
     product = Product.objects.get(id=product_id) # get the product
+    color = request.GET.get('color')
+    size = request.GET.get('size')
     product_variation = []
-    if request.method=='POST':
-         for item in request.POST:
-                key = item
-                value = request.POST[key]
+    
+    # if request.method=='POST':
+    #      for item in request.POST:
+    #             key = item
+    #             value = request.POST[key]
+                
 
-
-                try:
-                    variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
-                    product_variation.append(variation)
-                except:
-                    pass
+    #             try:
+    #                 variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+    #                 product_variation.append(variation)
+    #             except:
+    #                 pass
+    
+    
 
     if current_user.is_authenticated:
         
@@ -122,7 +127,9 @@ def add_cart(request,product_id):
             cart = cart,
             product=product,
             user = current_user,
-            quantity = 1
+            quantity = 1,
+            size = size,
+            color = color,
         )
         cart_item.save()
     
@@ -145,7 +152,8 @@ def add_cart(request,product_id):
                     cart_item.variations.add(item)
             if cart_item.quantity >= product.stock:
                 messages.warning(request, "Sorry, the product is out of stock.")
-                return redirect('product_detail', product_id=product.id)
+                return redirect('cart')
+
             cart_item.quantity += 1
             cart_item.save()
         except CartItem.DoesNotExist:
@@ -168,6 +176,7 @@ def add_cart(request,product_id):
 
 
 
+@login_required(login_url='login')
 def cart(request,total=0,quantity=0,cart_items=None):
     
     
@@ -193,9 +202,6 @@ def cart(request,total=0,quantity=0,cart_items=None):
 
     }      
     return render(request,'cart.html',context)
-
-
-
 
 
 
@@ -239,13 +245,16 @@ def checkout(request,total=0,quantity=0,cart_items=None):
         for cart_item in cart_items:
             total+=(cart_item.product.price * cart_item.quantity)
             quantity+=cart_item.quantity
+             
+            # CartItem.objects.filter(user=request.user).delete()
 
     except ObjectDoesNotExist:
         pass  
-
+    
+    print(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET)
     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
     payment = client.order.create({'amount': total*100, 'currency': 'INR', 'payment_capture': 1})
-
+    
     context = {
             'total':total,
             'quantity':quantity,
@@ -254,14 +263,18 @@ def checkout(request,total=0,quantity=0,cart_items=None):
             'payment':payment,
             
         }
+    
 
     return render(request,'checkout.html',context)
     
 
+@login_required(login_url='login')
 def success_page(request):
+    
         return render(request,'success_page.html')
 
 
+@login_required(login_url='login')
 def cod(request,total=0,quantity=0,cart_items=None):
 
     try:
